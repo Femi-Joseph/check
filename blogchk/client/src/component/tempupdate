@@ -1,0 +1,150 @@
+import React, { useState } from 'react'
+import { Box, styled, Typography, TextField,Button } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import Banner from '../Banner/Banner';
+import axios from 'axios';
+import { Navigate, useNavigate } from 'react-router-dom';
+const API_URL = 'http://localhost:8000';
+
+const axiosInstance = axios.create({
+    baseURL: API_URL,
+    timeout: 10000, 
+    headers: {
+        "content-type": "application/json"
+    }
+});
+
+
+const Wrapper = styled(Box)`
+    padding: 20px;
+    & > h3, & > h5 {
+        margin-top: 50px;
+    }
+`;
+
+const Text = styled(Typography)`
+    color: #878787;
+`;
+const postInitial={
+  title:'',
+  description:'',
+  picture:'',
+  username:'',
+  categories:'',
+  createdDate:'',
+
+
+
+}
+const Component = styled(Box)`
+    width: 700px;
+    margin: auto;
+    margin-top:100px;
+    box-shadow: 5px 2px 5px 2px rgb(0 0 0/ 0.6);
+`;
+
+
+const UpdatePost = (props) => {
+  console.log("props in update",props)
+  const navigate=useNavigate()
+  const [post,setPost]=useState(postInitial)
+  const onInputChange = (e) => {
+    setPost({ ...post, [e.target.name]: e.target.value });
+    
+}
+  const createPost=async()=>{
+    const response=await axiosInstance.post("/create",post)
+    if(response.status===200){
+      
+      navigate("/")
+    }
+
+  }
+  return (
+    
+    
+
+    <Component>
+    
+    <Wrapper>
+    <FormControl fullWidth sx={{ m: 1 }}>
+          <InputLabel htmlFor="outlined-adornment-amount">Title</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            /*startAdornment={<InputAdornment position="start">$</InputAdornment>}*/
+            label="Title"
+            name='title'
+            onChange={(e) => onInputChange(e)}
+            
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 1 }}>
+          <InputLabel htmlFor="outlined-adornment-amount">Description</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            /*startAdornment={<InputAdornment position="start">$</InputAdornment>}*/
+            label="Description"
+            name='description'
+            onChange={(e) => onInputChange(e)}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 1 }}>
+          <InputLabel htmlFor="outlined-adornment-amount">Photo</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            type="file"
+            /*startAdornment={<InputAdornment position="start">$</InputAdornment>}*/
+            label="Image"
+            name="picture"
+            onChange={(e) => onInputChange(e)}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 1 }} >
+          <InputLabel htmlFor="outlined-adornment-amount">Category</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            
+            /*startAdornment={<InputAdornment position="start">$</InputAdornment>}*/
+            label="Category"
+            name="categories"
+            onChange={(e) => onInputChange(e)}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 1 }} >
+          <InputLabel htmlFor="outlined-adornment-amount">UserName</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            
+            /*startAdornment={<InputAdornment position="start">$</InputAdornment>}*/
+            label="UserName"
+            name="username"
+            onChange={(e) => onInputChange(e)}
+          />
+        </FormControl>
+        <FormControl fullWidth sx={{ m: 1 }} >
+          <InputLabel htmlFor="outlined-adornment-amount">Created Date</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-amount"
+            
+            /*startAdornment={<InputAdornment position="start">$</InputAdornment>}*/
+            label="Created Date"
+            name="createdDate"
+            type="date"
+            onChange={(e) => onInputChange(e)}
+          />
+        </FormControl>
+        
+        
+        <Button variant="contained" onClick={()=>createPost()}>Add Post</Button>
+        
+    
+    </Wrapper>
+    </Component>
+    
+  )
+}
+
+export default UpdatePost
